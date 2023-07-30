@@ -16,7 +16,7 @@ class SummaryViewModel @Inject constructor() : BaseViewModel<SummaryState, Summa
 
     lateinit var listener: PaymentListener
     lateinit var listenerRoute: String
-    lateinit var navController: NavHostController
+    override lateinit var navController: NavHostController
 
     override fun onEvent(event: SummaryEvent) {
         privateState.apply {

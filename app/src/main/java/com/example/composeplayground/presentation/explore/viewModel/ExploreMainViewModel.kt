@@ -17,7 +17,7 @@ import javax.inject.Inject
 class ExploreMainViewModel @Inject constructor() : BaseViewModel<ExploreMainState, ExploreMainEvent>(), PaymentListener {
     override val privateState = MutableStateFlow(ExploreMainState())
 
-    lateinit var navController: NavHostController
+    override lateinit var navController: NavHostController
 
     override fun onEvent(event: ExploreMainEvent) {
         privateState.apply {
