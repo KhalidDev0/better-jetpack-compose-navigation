@@ -1,6 +1,6 @@
-package com.example.composeplayground.presentation.explore.utils
+package com.example.composeplayground.presentation.home.utils
 
-data class ExploreMainState(
+data class ExploreState(
     val firstName: String = "Hello",
     val secondName: String = "World",
     val expanded: Boolean = false

@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,14 +21,14 @@ import androidx.navigation.navigation
 import com.example.composeplayground.presentation.common.Graph
 import com.example.composeplayground.presentation.common.ROUTE_PAYMENT_OPTIONS
 import com.example.composeplayground.presentation.common.ROUTE_PAYMENT_SUMMARY
+import com.example.composeplayground.presentation.common.base.BaseListener
 import com.example.composeplayground.presentation.payment.utils.PaymentListener
 import com.example.composeplayground.presentation.payment.view.SummaryScreen
 import com.example.composeplayground.presentation.payment.viewModel.SummaryViewModel
 
 fun NavGraphBuilder.paymentNavGraph(
     navController: NavHostController,
-    listenerRoute: String,
-    listenerProvider: @Composable (NavBackStackEntry) -> PaymentListener,
+    listenerProvider: @Composable (NavBackStackEntry) -> BaseListener,
 ) {
     navigation(route = Graph.PAYMENT, startDestination = PaymentFlow.Options.route) {
 
@@ -44,13 +43,13 @@ fun NavGraphBuilder.paymentNavGraph(
         }
 
         composable(route = PaymentFlow.Summary.route) { backStackEntry ->
-            val parentEntry = remember(backStackEntry) { navController.getBackStackEntry(listenerRoute) }
-            val listener: PaymentListener = listenerProvider(parentEntry)
-
             val summaryViewModel = hiltViewModel<SummaryViewModel>()
-            summaryViewModel.listener = listener
-            summaryViewModel.listenerRoute = listenerRoute
             summaryViewModel.navController = navController
+            val paymentListener = listenerProvider(backStackEntry)
+            if (paymentListener is PaymentListener) {
+                summaryViewModel.listener = paymentListener
+            }
+            else throw IllegalStateException("PaymentListener is not implemented")
 
             val state by summaryViewModel.state.collectAsState()
 

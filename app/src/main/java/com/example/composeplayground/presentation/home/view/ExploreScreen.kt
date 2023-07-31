@@ -1,4 +1,4 @@
-package com.example.composeplayground.presentation.explore.view
+package com.example.composeplayground.presentation.home.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,15 +20,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composeplayground.presentation.common.composables.CustomAnimatedName
-import com.example.composeplayground.presentation.explore.utils.ExploreMainEvent
-import com.example.composeplayground.presentation.explore.utils.ExploreMainState
-import com.example.composeplayground.presentation.explore.viewModel.ExploreMainViewModel
+import com.example.composeplayground.presentation.home.utils.ExploreEvent
+import com.example.composeplayground.presentation.home.utils.ExploreState
+import com.example.composeplayground.presentation.home.viewModel.ExploreViewModel
 import com.example.composeplayground.ui.theme.ComposePlaygroundTheme
 
 @Composable
-fun ExploreMainScreen(
-    state: ExploreMainState,
-    onEvent: (ExploreMainEvent) -> Unit,
+fun ExploreScreen(
+    state: ExploreState,
+    onEvent: (ExploreEvent) -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -39,7 +39,7 @@ fun ExploreMainScreen(
             .clickable(
                 interactionSource = MutableInteractionSource(),
                 indication = null
-            ) { onEvent(ExploreMainEvent.ExpandName) }
+            ) { onEvent(ExploreEvent.ExpandName) }
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -51,12 +51,12 @@ fun ExploreMainScreen(
         }
 
         Button(modifier = Modifier.padding(vertical = 10.dp),onClick = {
-            onEvent(ExploreMainEvent.ChangeBothNames(firstName = state.secondName, secondName = state.firstName))
+            onEvent(ExploreEvent.ChangeBothNames(firstName = state.secondName, secondName = state.firstName))
         }) {
             Text(text = "Swap")
         }
 
-        Button(modifier = Modifier.padding(vertical = 10.dp),onClick = { onEvent(ExploreMainEvent.Pay) }) {
+        Button(modifier = Modifier.padding(vertical = 10.dp),onClick = { onEvent(ExploreEvent.Pay) }) {
             Text(text = "Donate")
         }
     }
@@ -64,14 +64,14 @@ fun ExploreMainScreen(
 
 @Preview(showBackground = true, device = "id:pixel_5")
 @Composable
-fun Preview() {
+fun PreviewExplore() {
     ComposePlaygroundTheme {
-        val exploreMainViewModel = hiltViewModel<ExploreMainViewModel>()
-        val state by exploreMainViewModel.state.collectAsState()
+        val exploreViewModel = hiltViewModel<ExploreViewModel>()
+        val state by exploreViewModel.state.collectAsState()
 
-        ExploreMainScreen(
+        ExploreScreen(
             state = state,
-            onEvent = { exploreMainViewModel.onEvent(it) },
+            onEvent = { exploreViewModel.onEvent(it) },
         )
     }
 }
